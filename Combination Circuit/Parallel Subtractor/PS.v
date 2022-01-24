@@ -41,9 +41,9 @@ module PS #(parameter size = 32)(
         for(i=0; i<size; i= i+1)
         begin:FS
             if(i==0)
-                FS fa(.B(br[i]), .D(s[i]), .z(1'b0), .x(i0[i]), .y(i1[i]));
+                FS fa(.B(br[i]), .D(D[i]), .z(1'b0), .x(i0[i]), .y(i1[i]));
             else
-                FS fa(.B(br[i]), .D(s[i]), .z(br[i-1]), .x(i0[i]), .y(i1[i]));
+                FS fa(.B(br[i]), .D(D[i]), .z(br[i-1]), .x(i0[i]), .y(i1[i]));
         end
     endgenerate
 endmodule
