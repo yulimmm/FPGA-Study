@@ -19,33 +19,49 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-module USR(
+module USR #(parameter size=4) (
+    o,
     clk,
-    rst,
-    sin
+    clear_n,
+    sel0,
+    sel1,
+    left,
+    right,
+    i
     );
     
+    output [size-1:0]o;
     input clk;
-    input rst;
-    input [1:0]s;
-    input [3:0] din;
-    input sin;
-    output reg [3:0] q;
+    input clear_n;
+    input sel0;
+    input sel1;
+    input left;
+    input right;
+    input [size-1:0]i;
     
-    always@(posedge clk, posedge rst)
-    
-    begin
-        if(rst)
-            q<=4'b0000;
-        else
-            if(ld)
-                q<=din;
+    wire [size-1:0]muxo;
+        
+    genvar v;
+    generate
+        for(v=0; v<size; v=v+1)
+        begin : USR
+            if(v == 0) 
+            begin : MUX 
+                M41 mux(.o(out[v]), .s0(sel0), .s1(sel1), .a(o[v]), .b(o[v+1]), .c(left), .d(i[v]));
+            end
+                        
+            else if(v == size-1)
+            begin : MUX
+                M41 mux(.o(out[v]), .s0(sel0), .s1(sel1), .a(o[v]), .b(right), .c(o[v-1]), .d(i[v]));
+            end
+            
             else
-                if(s==2'b01)
-                    q<={sin,q[2:0]};
-                 else if(s==2'b10)
-                    q<={q[3:1],sin};
-                 else if(s==2'b11)
-                    q<=din;
-    end
+            begin : MUX
+                M41 mux(.o(out[v]), .s0(sel0), .s1(sel1), .a(o[v]), .b(o[v+1]), .c(o[v-1]), .d(i[v]));
+            end
+            
+            DFF DFF(.q(o[v]), .clk(clk), .clear_n(clear_n), .d(out[v]));
+        end
+    endgenerate
+    
 endmodule
