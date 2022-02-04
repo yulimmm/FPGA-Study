@@ -47,20 +47,20 @@ module USR #(parameter size=4) (
         begin : USR
             if(v == 0) 
             begin : MUX 
-                M41 mux(.o(out[v]), .s0(sel0), .s1(sel1), .a(o[v]), .b(o[v+1]), .c(left), .d(i[v]));
+                M41 mux(.o(muxo[v]), .s0(sel0), .s1(sel1), .a(o[v]), .b(o[v+1]), .c(left), .d(i[v]));
             end
                         
             else if(v == size-1)
             begin : MUX
-                M41 mux(.o(out[v]), .s0(sel0), .s1(sel1), .a(o[v]), .b(right), .c(o[v-1]), .d(i[v]));
+                M41 mux(.o(muxo[v]), .s0(sel0), .s1(sel1), .a(o[v]), .b(right), .c(o[v-1]), .d(i[v]));
             end
             
             else
             begin : MUX
-                M41 mux(.o(out[v]), .s0(sel0), .s1(sel1), .a(o[v]), .b(o[v+1]), .c(o[v-1]), .d(i[v]));
+                M41 mux(.o(muxo[v]), .s0(sel0), .s1(sel1), .a(o[v]), .b(o[v+1]), .c(o[v-1]), .d(i[v]));
             end
             
-            DFF DFF(.q(o[v]), .clk(clk), .clear_n(clear_n), .d(out[v]));
+            DFF DFF(.Q(o[v]), .Clk(clk), .clr(clear_n), .D(muxo[v]));
         end
     endgenerate
     
