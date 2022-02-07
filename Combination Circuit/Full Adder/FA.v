@@ -1,18 +1,37 @@
-module FA(
-	carry_out,
-	sum,
-	carry_in,
-	a,
-	b
-	);
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date: 2022/02/07 17:17:13
+// Design Name: 
+// Module Name: Full_Adder
+// Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
 
-	output carry_out;
-	oputput sum;
-	input carry_in;
-	input a;
-	input b;
 
-	assign carry_out=(a&b)|((a^b)&carry_in);
-	assign sum = a^b^carry_in;
-
+module Full_Adder(
+    a,
+    b,
+    ci,
+    s,
+    co
+    );
+    
+    input a,b,ci;
+    output s,co;
+    
+    assign s = (a^b)^ci;
+    assign co = (a&b)|{(a^b)&ci};
+     
 endmodule
