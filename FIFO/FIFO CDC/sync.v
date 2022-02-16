@@ -36,18 +36,12 @@ module sync(
     reg ptr;
     reg optr;
     
-    always@(posedge clk, negedge rst)
-    begin
-        if(rst)
-            begin
-            ptr <= iptr;
-            optr <= ptr;
-            end
-        else
-            begin
-            optr <= 1'b0;
-            ptr <= 1'b0;
-            end
-    end
-    
+always@(posedge clk, negedge rst_n)
+begin
+ if(!rst)
+     {q2_ptr, ptr_temp} <= 0;
+
+ else
+     {q2_ptr, ptr_temp} <= {ptr_temp, ptr};
+end
 endmodule
