@@ -1,10 +1,9 @@
-//d flip flop 두개 붙어 있는 거 
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
 // Company: 
 // Engineer: 
 // 
-// Create Date: 2022/02/16 22:19:43
+// Create Date: 2022/02/21 22:20:51
 // Design Name: 
 // Module Name: sync
 // Project Name: 
@@ -20,28 +19,21 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-
-module sync(
-    optr,
-    iptr,
-    rst,
-    clk
+module sync #(parameter addrsize = 4)(
+    q2_ptr,
+    clk,
+    rst_n,
+    ptr
     );
     
-    output optr;
-    input iptr;
-    input rst;
+    output [addrsize:0]q2_ptr;
     input clk;
+    input rst_n;
+    input [addrsize:0] ptr;
     
-    reg ptr;
-    reg optr;
+    wire [addrsize:0]q1_ptr;
     
-always@(posedge clk, negedge rst_n)
-begin
- if(!rst)
-     {q2_ptr, ptr_temp} <= 0;
-
- else
-     {q2_ptr, ptr_temp} <= {ptr_temp, ptr};
-end
+    D_FF sync0(.q(q1_ptr), .q_(), .pre_n(), .clk(clk), .clr_n(rst_n), .d(ptr) );
+    D_FF sync1(.q(q2_ptr),.q_(), .pre_n(), .clk(clk), .clr_n(rst_n), .d(q1_ptr) );
+    
 endmodule
