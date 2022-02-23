@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 2022/02/21 22:21:33
+// Create Date: 2022/02/23 14:48:33
 // Design Name: 
-// Module Name: D_FF
+// Module Name: dff
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -20,22 +20,24 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module D_FF(
+module dff#(parameter addrsize = 8)(
     q,
-    q_,
     clk,
-    pre_n,
-    clr_n,
+    rst_n,
     d
     );
     
-    output q;
-    output q_;
+    output reg [addrsize:0]q;
     input clk;
-    input pre_n;
-    input clr_n;
-    input d;
+    input rst_n;
+    input [addrsize:0]d;
     
-    assign q = ~(q_ & ~(d & clk) & pre_n);
-    assign q_ = ~(q & ~(~(d & d) & clk) & clr_n);
+    always@(posedge clk, negedge rst_n)
+    begin
+        if(!rst_n)
+            q <= 0;
+        
+        else
+            q <= d;
+    end
 endmodule
